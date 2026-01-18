@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Check | ZigLink</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #f7a41d;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            height: 100vh; margin: 0; text-align: center;
+        }
+        .loader {
+            border: 4px solid #333;
+            border-top: 4px solid #f7a41d;
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 20px; margin-bottom: 10px; text-transform: uppercase; }
+        p { color: #888; font-size: 14px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <h1>ZigLink Security</h1>
+    <p>Verifying your browser...</p>
+    <div id="status" style="margin-top:20px; font-size:12px; opacity:0.5;">Initializing...</div>
+
+    <script>
+        const status = document.getElementById('status');
+        
+        async function runChallenge() {
+            status.innerText = "Computing challenge...";
+            
+            // Simulasi delay "kerja"
+            setTimeout(async () => {
+                try {
+                    status.innerText = "Connecting to gatekeeper...";
+                    
+                    // Request Kunci (Cookie)
+                    const res = await fetch('/auth/verify', { 
+                        method: 'POST',
+                        headers: { 'X-Challenge': 'ziglink-secure' }
+                    });
+
+                    if (res.ok) {
+                        status.innerText = "Access Granted. Redirecting...";
+                        window.location.reload();
+                    } else {
+                        status.innerText = "Verification Failed.";
+                        status.style.color = "red";
+                    }
+                } catch (e) {
+                    status.innerText = "Connection Error.";
+                }
+            }, 1500);
+        }
+
+        runChallenge();
+    </script>
+</body>
+</html>
