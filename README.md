@@ -1,91 +1,59 @@
-# ⚡ ZigLink - High Performance URL Shortener
+# ⚡ ZigLink - Solusi Cepat Pemendek URL
 
 ![ZigLink Banner](src/og-image.png)
 
-ZigLink adalah aplikasi pemendek URL modern yang dibangun menggunakan bahasa pemrograman **Zig**. Aplikasi ini dirancang untuk kecepatan ekstrem, keamanan tinggi, dan penggunaan sumber daya yang sangat minim.
+**ZigLink** adalah alat gratis untuk mengubah link internet yang panjang dan rumit menjadi link pendek yang cantik, mudah diingat, dan profesional. 
 
-## 🔥 Fitur Utama
+Dibuat dengan teknologi **Zig**, sistem ini bekerja secepat kilat agar Anda tidak perlu menunggu lama saat berbagi konten.
 
-*   **Blazing Fast**: Dibangun dengan Zig (native code), tanpa runtime berat seperti Node.js atau Python.
-*   **Secure**: Dilengkapi dengan **JS Challenge Anti-Bot** dan validasi URL ketat.
-*   **Real-time Analytics**: Dashboard interaktif dengan grafik pertumbuhan link dan statistik sistem.
-*   **Custom Alias**: Pengguna bisa membuat nama link sesuka hati.
-*   **QR Code**: Generate QR code otomatis untuk setiap link.
-*   **Persistent**: Database file JSON sederhana namun tangguh.
-*   **Responsive UI**: Tampilan "Clean Modern" yang adaptif untuk Desktop dan Mobile.
+---
 
-## 🛠️ Teknologi
+## ✨ Kenapa Harus Pakai ZigLink?
 
-*   **Backend**: Zig (HTTP Server, JSON Parser, System Info)
-*   **Frontend**: HTML5, CSS3 (Neo-Brutalism/Modern), JavaScript Vanilla
-*   **Server**: Nginx (Reverse Proxy), Systemd (Service Management)
+*   **🚀 Super Cepat**: Link Anda terbuka dalam sekejap tanpa jeda.
+*   **🔗 Nama Sesuai Keinginan**: Anda bisa menentukan sendiri akhiran linknya (contoh: `ziglink.syaii.sbs/my-fb`).
+*   **📱 QR Code Otomatis**: Setiap link yang Anda buat langsung mendapatkan kode QR untuk dipasang di poster atau kartu nama.
+*   **🛡️ Aman & Privasi**: Kami tidak melacak data pribadi Anda. Hanya pengalihan link yang murni dan bersih.
+*   **💻 Dashboard Modern**: Pantau semua link yang sudah Anda buat dalam satu tampilan yang simpel.
 
-## 🚀 Cara Menjalankan
+---
 
-### Prasyarat
-*   Compiler Zig (Versi 0.12.0 atau terbaru)
-*   Linux Server (Ubuntu/Debian recommended)
+## 📖 Panduan Penggunaan (Mudah!)
 
-### Instalasi & Build
+Hanya butuh 3 langkah untuk memendekkan link Anda:
 
-1.  **Clone Repository**
-    ```bash
-    git clone https://github.com/username/ziglink.git
-    cd ziglink
-    ```
+1.  **Tempel Link**: Masukkan alamat website yang panjang (misal: link Google Drive atau Profil Shopee) ke kolom **"Destination URL"**.
+2.  **Pilih Nama (Opsional)**: Masukkan nama unik di kolom **"Custom Alias"** jika Anda ingin link yang keren. Jika dikosongkan, kami akan buatkan secara acak.
+3.  **Klik & Bagikan**: Tekan tombol **"Shorten"**. Link pendek Anda akan muncul beserta tombol untuk **Copy** dan **QR Code**.
 
-2.  **Build Project** (Mode Release untuk performa maksimal)
+---
+
+## 🛠️ Panduan Untuk Developer
+
+Jika Anda ingin menjalankan server ZigLink sendiri di komputer atau VPS:
+
+### Cara Instalasi
+1.  Pastikan sudah menginstal **Zig Compiler 0.12.0**.
+2.  Unduh folder ini dan buka terminal di dalamnya.
+3.  Jalankan perintah build:
     ```bash
     zig build -Doptimize=ReleaseSafe
     ```
-
-3.  **Jalankan Manual**
+4.  Jalankan aplikasinya:
     ```bash
     ./zig-out/bin/ziglink
     ```
-    Server akan berjalan di port `8081`.
-
-### Deployment (Systemd)
-
-Untuk menjalankan di background secara otomatis:
-
-1.  Edit file service di `/etc/systemd/system/ziglink.service`.
-2.  Aktifkan service:
-    ```bash
-    sudo systemctl enable ziglink
-    sudo systemctl start ziglink
-    ```
-
-## 📡 Dokumentasi API
-
-### 1. Shorten Link
-Membuat link pendek baru.
-
-*   **Endpoint**: `POST /api/shorten`
-*   **Body (JSON)**:
-    ```json
-    {
-      "url": "https://example.com/long-url",
-      "alias": "custom-name" (Opsional)
-    }
-    ```
-*   **Response**:
-    ```json
-    { "short_code": "custom-name" }
-    ```
-
-### 2. Server Info
-Mengambil statistik server dan riwayat link.
-
-*   **Endpoint**: `GET /info`
-*   **Response**: JSON berisi statistik OS, RAM, dan daftar link.
-
-## 👤 Author
-
-Dibuat dengan ❤️ oleh **Bang Syaii**.
-
-*   🌐 **Website**: [bang.syaii.sbs](https://bang.syaii.sbs)
-*   ☕ **Support**: [Saweria](https://saweria.co/bgsyaii)
+    Website akan aktif di alamat `http://localhost:8081`.
 
 ---
-*ZigLink © 2026. Open Source Project.*
+
+## 👤 Pembuat & Dukungan
+
+Proyek ini sepenuhnya dikelola oleh **Bang Syaii**. 
+
+Jika alat ini membantu Anda, pertimbangkan untuk mendukung kelangsungan server kami:
+*   ☕ **Donasi via Saweria**: [Klik di Sini](https://saweria.co/bgsyaii)
+*   🌐 **Portofolio**: [bang.syaii.sbs](https://bang.syaii.sbs)
+
+---
+*ZigLink © 2026. Berbagi link jadi lebih mudah dan profesional.*
