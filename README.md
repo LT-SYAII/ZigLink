@@ -1,5 +1,7 @@
 # ⚡ ZigLink - High Performance URL Shortener
 
+![ZigLink Banner](src/og-image.png)
+
 ZigLink adalah aplikasi pemendek URL modern yang dibangun menggunakan bahasa pemrograman **Zig**. Aplikasi ini dirancang untuk kecepatan ekstrem, keamanan tinggi, dan penggunaan sumber daya yang sangat minim.
 
 ## 🔥 Fitur Utama
