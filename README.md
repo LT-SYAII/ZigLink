@@ -1,59 +1,132 @@
-# ⚡ ZigLink - Solusi Cepat Pemendek URL
+# ⚡ ZigLink - Simple & Powerful URL Shortener
 
 ![ZigLink Banner](src/og-image.png)
 
-**ZigLink** adalah alat gratis untuk mengubah link internet yang panjang dan rumit menjadi link pendek yang cantik, mudah diingat, dan profesional. 
-
-Dibuat dengan teknologi **Zig**, sistem ini bekerja secepat kilat agar Anda tidak perlu menunggu lama saat berbagi konten.
+**ZigLink** adalah solusi pemendek URL berperforma tinggi yang dirancang untuk kemudahan penggunaan dan privasi maksimal. Dibangun menggunakan **Zig**, aplikasi ini menawarkan kecepatan luar biasa dengan konsumsi sumber daya yang sangat rendah.
 
 ---
 
-## ✨ Kenapa Harus Pakai ZigLink?
+## ✨ Fitur Unggulan
 
-*   **🚀 Super Cepat**: Link Anda terbuka dalam sekejap tanpa jeda.
-*   **🔗 Nama Sesuai Keinginan**: Anda bisa menentukan sendiri akhiran linknya (contoh: `ziglink.syaii.sbs/my-fb`).
-*   **📱 QR Code Otomatis**: Setiap link yang Anda buat langsung mendapatkan kode QR untuk dipasang di poster atau kartu nama.
-*   **🛡️ Aman & Privasi**: Kami tidak melacak data pribadi Anda. Hanya pengalihan link yang murni dan bersih.
-*   **💻 Dashboard Modern**: Pantau semua link yang sudah Anda buat dalam satu tampilan yang simpel.
-
----
-
-## 📖 Panduan Penggunaan (Mudah!)
-
-Hanya butuh 3 langkah untuk memendekkan link Anda:
-
-1.  **Tempel Link**: Masukkan alamat website yang panjang (misal: link Google Drive atau Profil Shopee) ke kolom **"Destination URL"**.
-2.  **Pilih Nama (Opsional)**: Masukkan nama unik di kolom **"Custom Alias"** jika Anda ingin link yang keren. Jika dikosongkan, kami akan buatkan secara acak.
-3.  **Klik & Bagikan**: Tekan tombol **"Shorten"**. Link pendek Anda akan muncul beserta tombol untuk **Copy** dan **QR Code**.
+*   **🚀 Performa Native**: Tidak menggunakan runtime (seperti Node.js/Python), berjalan langsung di atas mesin.
+*   **🛡️ Keamanan Berlapis**: Dilengkapi dengan **Silent JS Challenge** untuk memblokir bot dan DDoS.
+*   **🔗 Custom Alias**: Buat link sesuai brand Anda (contoh: `domain.com/diskon-spesial`).
+*   **📱 QR Code Generator**: Otomatis membuat kode QR untuk setiap link yang dipendekkan.
+*   **📑 Real-time History**: Pantau link yang baru dibuat melalui dashboard yang interaktif.
+*   **📄 Database Persisten**: Data tersimpan aman dalam file JSON, tidak hilang saat restart.
 
 ---
 
-## 🛠️ Panduan Untuk Developer
+## 🛠️ Panduan Instalasi (Step-by-Step)
 
-Jika Anda ingin menjalankan server ZigLink sendiri di komputer atau VPS:
+Ikuti langkah-langkah di bawah ini untuk menjalankan ZigLink di server Linux (VPS) Anda sendiri.
 
-### Cara Instalasi
-1.  Pastikan sudah menginstal **Zig Compiler 0.12.0**.
-2.  Unduh folder ini dan buka terminal di dalamnya.
-3.  Jalankan perintah build:
-    ```bash
-    zig build -Doptimize=ReleaseSafe
+### 1. Prasyarat Sistem
+Pastikan server Anda sudah terinstall:
+*   **Zig Compiler 0.12.0**
+*   **Nginx**
+*   **Certbot** (untuk HTTPS)
+
+### 2. Persiapan Folder & Kode
+```bash
+git clone https://github.com/LT-SYAII/ZigLink.git
+cd ZigLink
+```
+
+### 3. Kompilasi (Build)
+Ubah kode sumber menjadi aplikasi executable yang dioptimasi:
+```bash
+# Build dalam mode ReleaseSafe untuk performa maksimal namun tetap aman
+zig build -Doptimize=ReleaseSafe
+
+# Pindahkan binary ke lokasi yang mudah diakses
+mv zig-out/bin/zig zig-out/bin/ziglink
+```
+
+### 4. Konfigurasi Autostart (Systemd)
+Agar aplikasi berjalan otomatis di background dan hidup kembali jika server restart:
+
+1.  Buat file service: `sudo nano /etc/systemd/system/ziglink.service`
+2.  Tempelkan kode berikut (sesuaikan path `/root/zig` dengan lokasi folder Anda):
+    ```ini
+    [Unit]
+    Description=ZigLink URL Shortener
+    After=network.target
+
+    [Service]
+    Type=simple
+    User=root
+    WorkingDirectory=/root/zig
+    ExecStart=/root/zig/zig-out/bin/ziglink
+    Restart=always
+
+    [Install]
+    WantedBy=multi-user.target
     ```
-4.  Jalankan aplikasinya:
+3.  Aktifkan service:
     ```bash
-    ./zig-out/bin/ziglink
+    sudo systemctl daemon-reload
+    sudo systemctl enable ziglink
+    sudo systemctl start ziglink
     ```
-    Website akan aktif di alamat `http://localhost:8081`.
+
+### 5. Konfigurasi Nginx (Reverse Proxy)
+Agar aplikasi bisa diakses melalui domain (port 80/443), bukan port 8081:
+
+1.  Buat config baru: `sudo nano /etc/nginx/sites-available/ziglink`
+2.  Tempelkan konfigurasi dasar:
+    ```nginx
+    server {
+        server_name domain-anda.com;
+        location / {
+            proxy_pass http://127.0.0.1:8081;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+    ```
+3.  Aktifkan dan restart Nginx:
+    ```bash
+    sudo ln -s /etc/nginx/sites-available/ziglink /etc/nginx/sites-enabled/
+    sudo systemctl restart nginx
+    ```
+
+### 6. Aktivasi HTTPS (SSL Gratis)
+Gunakan Let's Encrypt agar website Anda memiliki gembok hijau:
+```bash
+sudo certbot --nginx -d domain-anda.com
+```
 
 ---
 
-## 👤 Pembuat & Dukungan
+## 📡 Dokumentasi API
 
-Proyek ini sepenuhnya dikelola oleh **Bang Syaii**. 
+### Shorten URL
+*   **Endpoint**: `POST /api/shorten`
+*   **Header**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "url": "https://website-sangat-panjang.com/data/123",
+      "alias": "link-keren"
+    }
+    ```
 
-Jika alat ini membantu Anda, pertimbangkan untuk mendukung kelangsungan server kami:
-*   ☕ **Donasi via Saweria**: [Klik di Sini](https://saweria.co/bgsyaii)
+---
+
+## 🛡️ Sistem Keamanan (Anti-Bot)
+ZigLink menggunakan metode **Silent JS Challenge**. 
+*   **Browser**: Pengguna asli tidak akan merasakan apa-apa, browser otomatis memverifikasi diri ke server.
+*   **Bot/CLI (Curl)**: Jika mencoba memanggil API secara langsung tanpa browser, server akan merespon: `{"error": "you can't because you're robot!"}`.
+
+---
+
+## 👤 Author & Support
+
+Dibuat dengan semangat oleh **Bang Syaii**.
+
+*   ☕ **Donasi via Saweria**: [saweria.co/bgsyaii](https://saweria.co/bgsyaii)
 *   🌐 **Portofolio**: [bang.syaii.sbs](https://bang.syaii.sbs)
 
 ---
-*ZigLink © 2026. Berbagi link jadi lebih mudah dan profesional.*
+*ZigLink © 2026. Merampingkan link, mempercepat koneksi.*
