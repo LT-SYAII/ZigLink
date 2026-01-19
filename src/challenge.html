@@ -37,13 +37,11 @@
         
         async function runChallenge() {
             status.innerText = "Computing challenge...";
-            
-            // Simulasi delay "kerja"
+           
             setTimeout(async () => {
                 try {
                     status.innerText = "Connecting to gatekeeper...";
-                    
-                    // Request Kunci (Cookie)
+                   
                     const res = await fetch('/auth/verify', { 
                         method: 'POST',
                         headers: { 'X-Challenge': 'ziglink-secure' }
