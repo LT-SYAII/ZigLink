@@ -1,359 +1,514 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZigLink - High Performance Shortener</title>
-    <meta name="description" content="ZigLink helps you create simple, memorable, and powerful short links for your brand or personal use. Share your content with confidence using our easy-to-use link management tool.">
-    <meta name="keywords" content="short link, custom alias, link management, easy sharing, social media tools, custom url">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="Bang Syaii">
+    <meta name="description" content="ZigLink helps you create simple, memorable, and powerful short links for your brand or personal use.">
     <link rel="canonical" href="https://ziglink.top">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="ZigLink - Simple & Powerful URL Shortener">
-    <meta property="og:description" content="Simplify your links and amplify your reach. Create custom short links in seconds with ZigLink.">
+    <meta property="og:title" content="ZigLink - Modern URL Shortener">
     <meta property="og:image" content="https://ziglink.top/og-image.png">
-    <meta property="og:url" content="https://ziglink.top">
     <link rel="icon" type="image/png" href="/favicon.png">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;800&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Scripts: Lucide Icons, QRCode, Lottie -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "ZigLink",
-      "url": "https://ziglink.top",
-      "description": "Ultra-fast URL shortener powered by Zig. Create custom, reliable, and lightning-fast short links.",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Any",
-      "author": {
-        "@type": "Person",
-        "name": "Bang Syaii",
-        "url": "https://bang.syaii.sbs"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
     <style>
         :root {
-            --bg: #09090b;
-            --card: #121214;
-            --input: #1c1c1f;
-            --border: #27272a;
-            --text: #f4f4f5;
-            --text-muted: #71717a;
-            --primary: #f97316;
-            --primary-glow: rgba(249, 115, 22, 0.15);
-            --success: #10b981;
-            --spring: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+            /* Dark Theme (Default) */
+            --bg: #030303;
+            --surface: #0a0a0a;
+            --surface-glass: rgba(20, 20, 20, 0.75);
+            --border: rgba(255, 255, 255, 0.1);
+            --primary: #ff5500;
+            --primary-dark: #cc4400;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --input-bg: rgba(0,0,0,0.3);
+            --shadow: rgba(0,0,0,0.5);
+            --font-main: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
+
+        [data-theme="light"] {
+            --bg: #f4f4f5;
+            --surface: #ffffff;
+            --surface-glass: rgba(255, 255, 255, 0.85);
+            --border: rgba(0, 0, 0, 0.1);
+            --primary: #ff5500;
+            --primary-dark: #e04b00;
+            --text: #18181b;
+            --text-muted: #52525b;
+            --input-bg: rgba(0,0,0,0.03);
+            --shadow: rgba(0,0,0,0.1);
+        }
+
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        html, body { min-height: 100vh; margin: 0; }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg); color: var(--text);
-            display: flex; flex-direction: column;
-            font-size: clamp(14px, 1vw, 16px); /* Responsive base font size */
-        }
-        .container { 
-            width: 100%; max-width: 1200px; margin: 0 auto; 
-            padding: clamp(1rem, 2.5vw, 2rem); flex: 1; display: flex; flex-direction: column;
-        }
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            70% { transform: scale(1.08); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes bounceIn {
-            0% { transform: translateY(30px) scale(0.9); opacity: 0; }
-            60% { transform: translateY(-10px) scale(1.05); opacity: 1; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-        .anim-1 { animation: popIn 0.6s var(--spring) forwards; }
-        .anim-2 { animation: bounceIn 0.6s var(--spring) 0.1s forwards; }
-        .anim-3 { animation: bounceIn 0.6s var(--spring) 0.2s forwards; }
-        .anim-4 { animation: bounceIn 0.6s var(--spring) 0.3s forwards; }
-        .anim-5 { animation: bounceIn 0.6s var(--spring) 0.4s forwards; }
         
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Lottie Background */
+        #lottie-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.15; pointer-events: none;
+            overflow: hidden;
+        }
+        [data-theme="light"] #lottie-bg { opacity: 0.08; filter: invert(1); }
+
+        /* --- Header --- */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: clamp(10px, 2vh, 15px) clamp(20px, 5vw, 40px); border-bottom: 1px solid var(--border);
-            background: rgba(9,9,11,0.8); backdrop-filter: blur(12px);
-            position: sticky; top: 0; z-index: 100; gap: 20px;
-            animation: bounceIn 0.6s var(--spring) forwards;
+            padding: 20px clamp(20px, 5vw, 60px);
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            background: rgba(var(--bg), 0.7);
+            transition: border-color 0.3s;
         }
-        ...
-        .stats-bar {
-            text-align: center; padding: clamp(15px, 2vh, 20px); margin-top: 30px;
-            border: 1px dashed var(--border); border-radius: 16px;
-            color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
-            display: flex; justify-content: center; gap: 10px; align-items: center;
-            opacity: 0; animation: bounceIn 0.6s var(--spring) 0.3s forwards;
-            font-size: clamp(12px, 1vw, 14px);
-            position: relative; z-index: 10;
-        }
-        .stats-count { color: var(--primary); font-weight: 800; font-size: clamp(16px, 1.5vw, 18px); }
-        
-        .section-title { text-align: center; font-size: clamp(20px, 2vw, 24px); font-weight: 800; margin: clamp(40px, 5vh, 60px) 0 clamp(20px, 3vh, 30px) 0; letter-spacing: -0.5px; opacity: 0; animation: popIn 0.8s var(--spring) 0.4s forwards; }
-        .steps-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-            gap: clamp(15px, 2vw, 20px); width: 100%;
-            opacity: 0; animation: popIn 0.8s var(--spring) 0.5s forwards;
-        }
-        .step-card {
-            background: var(--card); border: 1px solid var(--border); padding: clamp(20px, 3vw, 30px); border-radius: 20px;
-            text-align: center; transition: 0.3s var(--spring); position: relative; overflow: hidden;
-        }
-        .step-card:hover { border-color: var(--primary); transform: translateY(-10px) rotate(2deg); }
-        .step-card i { font-size: clamp(32px, 4vw, 40px); color: var(--primary); margin-bottom: 15px; display: block; transition: 0.3s var(--spring); }
-        .step-card:hover i { transform: scale(1.5) rotate(-10deg); }
-        .step-card h4 { margin: 0 0 10px 0; font-size: clamp(16px, 1.5vw, 18px); color: white; }
-        .step-card p { margin: 0; font-size: clamp(13px, 1vw, 14px); color: var(--text-muted); line-height: 1.6; }
-        
-        .cta-section {
-            background: transparent;
-            border: 1px dashed var(--border); padding: clamp(30px, 4vh, 60px) 20px; border-radius: 30px;
-            text-align: center; margin: clamp(40px, 5vh, 60px) 0; width: 100%;
-            opacity: 0; animation: popIn 0.8s var(--spring) 0.6s forwards;
-            transition: 0.3s var(--spring);
-        }
-        .cta-section:hover { transform: scale(1.02); border-color: var(--primary); }
-        .cta-section h2 { font-size: clamp(24px, 3vw, 32px); margin-top: 0; margin-bottom: 15px; }
-        .btn-cta {
-            background: white; color: black; border: none; padding: clamp(12px, 1.5vh, 15px) clamp(30px, 4vw, 40px);
-            border-radius: 12px; font-weight: 800; font-size: clamp(14px, 1.2vw, 16px); cursor: pointer; margin-top: 20px;
-            transition: 0.3s var(--spring); box-shadow: 0 5px 0 #ccc;
-        }
-        .btn-cta:hover { transform: translateY(-5px) scale(1.05) rotate(-2deg); box-shadow: 0 10px 0 var(--primary); }
-        .btn-cta:active { transform: translateY(0); box-shadow: 0 0 0; }
-        
-        .site-footer {
-            width: 100%; border-top: 1px solid var(--border);
-            padding: clamp(20px, 4vh, 40px) 0; margin-top: auto;
-            background: linear-gradient(to top, #050505, transparent);
-            animation: popIn 0.8s var(--spring) 0.7s forwards; opacity: 0;
-        }
-        .footer-content {
-            max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 2vw, 40px);
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 20px;
-        }
-        .footer-left { display: flex; flex-direction: column; gap: 5px; font-size: clamp(12px, 1vw, 13px); color: var(--text-muted); }
-        .footer-brand { font-weight: 800; color: white; letter-spacing: -0.5px; font-size: clamp(14px, 1.2vw, 16px); }
-        .footer-right { display: flex; gap: clamp(15px, 2vw, 20px); align-items: center; }
-        .footer-right a { color: var(--text-muted); text-decoration: none; font-size: clamp(12px, 1vw, 13px); font-weight: 600; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
-        .footer-right a:hover { color: var(--primary); }
-        .footer-donate-link { 
-            color: var(--primary) !important; background: rgba(249, 115, 22, 0.1); 
-            padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(249, 115, 22, 0.2);
-        }
-        .footer-donate-link:hover { background: rgba(249, 115, 22, 0.2); transform: translateY(-2px); }
 
+        .brand {
+            font-weight: 800; font-size: 22px; 
+            display: flex; align-items: center; gap: 8px;
+            letter-spacing: -0.5px; color: var(--text); text-decoration: none;
+        }
+        .brand span { color: var(--primary); }
+        .brand .lucide { color: var(--primary); width: 24px; height: 24px; animation: pulse 2s infinite; }
+
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+
+        .theme-toggle {
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text); padding: 0; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s; width: 40px; height: 40px;
+            position: relative; z-index: 101; pointer-events: auto;
+        }
+        .theme-toggle:hover { background: var(--surface); border-color: var(--text-muted); }
+        .theme-toggle .lucide { width: 20px; height: 20px; }
+
+        .btn-donate {
+            background: var(--surface); color: var(--text);
+            border: 1px solid var(--border); padding: 8px 16px;
+            border-radius: 50px; font-size: 13px; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-donate:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-donate .lucide { width: 16px; height: 16px; fill: currentColor; }
+
+        /* --- Main Layout --- */
+        .container {
+            width: 100%; max-width: 1100px; margin: 0 auto;
+            padding: clamp(20px, 5vw, 60px);
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- Hero --- */
+        .hero { text-align: center; margin: clamp(40px, 8vh, 80px) 0; position: relative; }
+        .hero h1 {
+            font-size: clamp(40px, 8vw, 80px); line-height: 1; margin: 0;
+            font-weight: 800; letter-spacing: -2px;
+            color: var(--text);
+        }
+        .hero h1 span {
+            background: linear-gradient(to right, var(--primary), #ff9955);
+            -webkit-background-clip: text; color: transparent;
+        }
+        .hero p {
+            color: var(--text-muted); font-size: clamp(16px, 2vw, 20px);
+            max-width: 600px; margin: 20px auto 0; font-weight: 300;
+        }
+
+        /* --- Card --- */
+        .shortener-card {
+            width: 100%; max-width: 800px;
+            background: var(--surface-glass);
+            border: 1px solid var(--border);
+            border-radius: 24px; padding: 10px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 60px -10px var(--shadow);
+            display: flex; flex-direction: column; gap: 8px;
+            position: relative; overflow: hidden;
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .input-row {
+            display: flex; gap: 8px; padding: 10px; background: var(--input-bg);
+            border-radius: 18px; border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .input-group { flex: 1; position: relative; }
+        .input-group .lucide { 
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%); 
+            color: var(--text-muted); width: 20px; height: 20px; pointer-events: none;
+        }
+        
+        input {
+            width: 100%; background: transparent; border: none;
+            color: var(--text); font-size: 16px; padding: 16px 16px 16px 48px;
+            font-family: var(--font-main); transition: color 0.3s;
+        }
+        input::placeholder { color: var(--text-muted); opacity: 0.7; }
+
+        .actions-row { display: flex; gap: 10px; padding: 0 10px 10px 10px; }
+        .alias-group { 
+            flex: 1; background: var(--input-bg); 
+            border: 1px solid var(--border); border-radius: 14px;
+            position: relative; display: flex; align-items: center;
+            transition: 0.3s;
+        }
+        .alias-group span { 
+            padding-left: 16px; font-family: var(--font-mono); 
+            color: var(--text-muted); font-size: 14px;
+        }
+        .alias-group input { padding-left: 8px; }
+
+        .btn-submit {
+            background: var(--primary); color: white; border: none;
+            padding: 0 32px; height: 52px; border-radius: 14px;
+            font-weight: 700; font-size: 15px; cursor: pointer;
+            transition: 0.3s; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 85, 0, 0.2);
+        }
+        .btn-submit:hover { 
+            background: var(--primary-dark); transform: translateY(-1px); 
+            box-shadow: 0 8px 25px rgba(255, 85, 0, 0.3);
+        }
+        .btn-submit .lucide { width: 18px; height: 18px; }
+
+        /* --- Result --- */
+        #resultContainer {
+            display: none; margin-top: 20px; width: 100%; max-width: 800px;
+            background: var(--surface); border: 1px solid var(--primary);
+            border-radius: 16px; padding: 16px 24px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .result-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .short-link {
+            font-family: var(--font-mono); font-size: 18px; color: var(--primary);
+            text-decoration: none; font-weight: 700;
+        }
+        .short-link:hover { text-decoration: underline; }
+        .result-actions button {
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-muted); width: 40px; height: 40px; border-radius: 10px;
+            cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center;
+        }
+        .result-actions button:hover { background: var(--bg); color: var(--text); }
+        .result-actions .lucide { width: 20px; height: 20px; }
+
+        /* --- Features --- */
+        .features {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px; width: 100%; margin-top: 80px;
+        }
+        .bento-card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 30px; border-radius: 20px; position: relative; overflow: hidden;
+            transition: 0.3s;
+        }
+        .bento-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+        .bento-card h3 { margin: 0 0 10px 0; font-size: 18px; display: flex; align-items: center; gap: 10px; color: var(--text); }
+        .bento-card h3 .lucide { color: var(--primary); width: 24px; height: 24px; }
+        .bento-card p { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin: 0; }
+        
+        .stat-highlight {
+            font-family: var(--font-mono); font-size: 32px; font-weight: 700;
+            color: var(--text); margin-top: 15px; display: block;
+        }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: auto; border-top: 1px solid var(--border);
+            padding: 40px 0; background: var(--surface); text-align: center;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: 0.2s; }
+        .footer-links a:hover { color: var(--primary); }
+        .copyright { color: var(--text-muted); font-size: 12px; }
+
+        /* --- Mobile --- */
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .bottom-row { flex-direction: column; align-items: stretch; gap: 10px; }
-            .btn-submit { 
-                width: 100%; 
-                height: 48px; 
-                font-size: 15px; 
-                padding: 0 20px;
-                border-radius: 10px;
-            }
-            .creation-card { padding: 18px; gap: 12px; }
-            .field-group { gap: 2px; }
-            .field-group label { font-size: 11px; margin-bottom: 0; }
-            input { padding: 12px 14px; font-size: 15px; border-radius: 10px; }
-            .hero-top, .hero-bottom { font-size: clamp(30px, 10vw, 40px); }
+            .input-row, .actions-row { flex-direction: column; background: transparent; border: none; padding: 0; }
+            .input-group, .alias-group { background: var(--surface); border: 1px solid var(--border); padding: 5px; }
+            .shortener-card { background: var(--surface); padding: 20px; gap: 15px; }
+            .btn-submit { width: 100%; justify-content: center; height: 56px; }
+            .alias-group span { display: none; }
         }
 
-        #qrModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999; }
-        #qrModal.show { opacity: 1; pointer-events: all; }
-        .modal-content { background: var(--card); padding: 32px; border-radius: 24px; border: 1px solid var(--border); text-align: center; max-width: 90%; transform: scale(0.5); transition: 0.4s var(--spring); }
-        #qrModal.show .modal-content { transform: scale(1); }
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translate(-50%, 100px); background: white; color: black; padding: 12px 28px; border-radius: 12px; font-weight: 700; opacity: 0; transition: 0.4s var(--spring); z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid black; }
-        #toast.show { transform: translate(-50%, 0) rotate(-2deg); opacity: 1; }
-        #toast.error { background: #ef4444; color: white; border-color: #ef4444; transform: translate(-50%, 0) rotate(2deg); }
+        /* --- Animations --- */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+
+        /* --- Toast & Modal --- */
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--surface); color: var(--text); padding: 12px 24px; border: 1px solid var(--border); border-radius: 50px; font-weight: 600; opacity: 0; transition: 0.4s; z-index: 1000; box-shadow: 0 10px 30px var(--shadow); }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #toast.error { background: #ff3333; color: white; border: none; }
+        #qrModal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        #qrModal.show { display: flex; }
+        .qr-card { background: white; padding: 30px; border-radius: 20px; text-align: center; }
     </style>
 </head>
 <body>
+
+<div id="lottie-bg"></div>
+
 <header>
-    <div class="brand"><i class="ph-fill ph-lightning"></i> ZigLink</div>
-    <nav class="nav-links">
-        <a href="https://bang.syaii.sbs">Author</a>
-        <a href="https://github.com/LT-SYAII" target="_blank">GitHub</a>
-    </nav>
-    <div class="header-actions">
+    <a href="/" class="brand">
+        <i data-lucide="zap"></i>
+        Zig<span>Link</span>
+    </a>
+    <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+            <i data-lucide="moon"></i>
+        </button>
         <a href="https://saweria.co/bgsyaii" target="_blank" class="btn-donate">
-            <i class="ph-fill ph-coffee"></i> Donate
+            <i data-lucide="heart"></i> Donate
         </a>
     </div>
 </header>
+
 <div class="container">
-    <div class="hero-section anim-1">
-        <div class="hero-top">READY FOR</div>
-        <div class="hero-bottom">SHORTEN??</div>
+    <div class="hero">
+        <h1>Shorten Links.<br><span>Expand Reach.</span></h1>
+        <p>The open-source URL shortener powered by Zig. Blazing fast, privacy-focused, and uncompromisingly modern.</p>
     </div>
-    <div class="creation-card anim-2">
-        <div class="field-group">
-            <label>Destination URL</label>
-            <input type="url" id="urlInput" placeholder="https://example.com/long-link..." required>
+
+    <div class="shortener-card">
+        <div class="input-row">
+            <div class="input-group">
+                <i data-lucide="link"></i>
+                <input type="url" id="urlInput" placeholder="Paste your long URL here..." required>
+            </div>
         </div>
-        <div class="bottom-row">
-            <div class="field-group">
-                <label>Custom Alias (Opt)</label>
-                <input type="text" id="aliasInput" placeholder="e.g. my-link">
+        <div class="actions-row">
+            <div class="alias-group">
+                <span id="domainPrefix">ziglink.top/</span>
+                <input type="text" id="aliasInput" placeholder="custom-alias (opt)">
             </div>
             <button class="btn-submit" onclick="createLink()" id="btnCreate">
-                <i class="ph-bold ph-magic-wand"></i> Shorten
+                Shorten <i data-lucide="arrow-right"></i>
             </button>
         </div>
     </div>
+
     <div id="resultContainer">
-        <div class="result-content">
-            <a href="#" id="resultLink" target="_blank" class="result-link">/link</a>
-            <div style="display:flex; gap:10px">
-                <button class="btn-icon" id="btnResQr" style="width:48px;height:48px;"><i class="ph-bold ph-qr-code" style="font-size:20px;"></i></button>
-                <button class="btn-icon" id="btnResCopy" style="width:48px;height:48px;"><i class="ph-bold ph-copy" style="font-size:20px;"></i></button>
+        <div class="result-inner">
+            <a href="#" id="resultLink" target="_blank" class="short-link">...</a>
+            <div class="result-actions">
+                <button id="btnResQr" onclick="showQr(document.getElementById('resultLink').href)"><i data-lucide="qr-code"></i></button>
+                <button id="btnResCopy"><i data-lucide="copy"></i></button>
             </div>
         </div>
     </div>
-    <div class="stats-bar anim-3">
-        <i class="ph-fill ph-rocket-launch"></i>
-        <div>Total Links Created: <span id="totalLinks" class="stats-count">0</span></div>
-    </div>
-    <h3 class="section-title anim-4">How It Works</h3>
-    <div class="steps-grid anim-5">
-        <div class="step-card">
-            <i class="ph-fill ph-link"></i>
-            <h4>Paste Link</h4>
-            <p>Enter the long URL you want to shorten in the box above.</p>
+
+    <div class="features">
+        <div class="bento-card">
+            <h3><i data-lucide="bar-chart-3"></i> Total Links</h3>
+            <span class="stat-highlight" id="totalLinks">0</span>
+            <p>Shortened URLs served globally.</p>
         </div>
-        <div class="step-card">
-            <i class="ph-fill ph-pencil-simple"></i>
-            <h4>Customize</h4>
-            <p>Add a custom alias to make your link memorable and unique.</p>
+        <div class="bento-card">
+            <h3><i data-lucide="zap"></i> Blazing Fast</h3>
+            <p style="margin-top:10px;">Built with Zig for minimal latency and maximum throughput. No bloat, just speed.</p>
         </div>
-        <div class="step-card">
-            <i class="ph-fill ph-share-network"></i>
-            <h4>Share It</h4>
-            <p>Copy your new short link or generate a QR code instantly.</p>
+        <div class="bento-card">
+            <h3><i data-lucide="lock"></i> Privacy First</h3>
+            <p style="margin-top:10px;">We respect user privacy. No tracking scripts, no personal data harvesting.</p>
         </div>
-    </div>
-    <div class="cta-section anim-5">
-        <h2>Start Shortening Now</h2>
-        <p>Join thousands of users creating optimized links with ZigLink.</p>
-        <button onclick="document.getElementById('urlInput').focus()" class="btn-cta">Get Started Free</button>
     </div>
 </div>
-<footer class="site-footer">
-    <div class="footer-content">
-        <div class="footer-left">
-            <span class="footer-brand">ZigLink</span>
-            <span class="footer-copy">&copy; <span id="currentYear"></span>. All rights reserved.</span>
-        </div>
-        <div class="footer-right">
-            <a href="https://bang.syaii.sbs" target="_blank">Author</a>
-            <a href="https://github.com/LT-SYAII" target="_blank">GitHub</a>
-            <a href="https://saweria.co/bgsyaii" target="_blank" class="footer-donate-link">
-                <i class="ph-fill ph-heart"></i> Donate
-            </a>
-        </div>
+
+<footer>
+    <div class="footer-links">
+        <a href="https://github.com/LT-SYAII">GitHub</a>
+        <a href="https://bang.syaii.sbs">Contact</a>
+        <a href="#">Terms</a>
     </div>
+    <div class="copyright">&copy; <span id="currentYear"></span> ZigLink. Designed by Bang Syaii.</div>
 </footer>
-<div id="qrModal" onclick="closeQr()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div id="qrcode" style="padding:15px; background:white; border-radius:12px; display:inline-block;"></div>
-        <button onclick="closeQr()" style="margin-top:20px; width:100%; padding:10px; border-radius:8px; border:none; background:#333; color:white; cursor:pointer; font-weight:700;">CLOSE</button>
+
+<div id="toast">Success</div>
+<div id="qrModal" onclick="this.classList.remove('show')">
+    <div class="qr-card" onclick="event.stopPropagation()">
+        <div id="qrcode"></div>
+        <p style="color:black; margin-top:15px; font-weight:600; font-size:14px;">Scan to visit</p>
     </div>
 </div>
-<div id="toast">Success</div>
+
 <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Set dynamic domain prefix
+    document.getElementById('domainPrefix').innerText = window.location.host + '/';
+
+    // Theme Toggle Logic
+    const html = document.documentElement;
+    const toggleBtn = document.getElementById('themeToggle');
+    
+    // Check local storage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme) {
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+    } else if (!prefersDark) {
+        html.setAttribute('data-theme', 'light');
+        updateIcon('light');
+    }
+
+    function toggleTheme() {
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateIcon(next);
+    }
+
+    function updateIcon(theme) {
+        // Change icon based on theme
+        const iconName = theme === 'dark' ? 'moon' : 'sun';
+        toggleBtn.innerHTML = `<i data-lucide="${iconName}"></i>`;
+        lucide.createIcons(); // Re-render icon
+    }
+
+    // Lottie Background Animation
+    lottie.loadAnimation({
+        container: document.getElementById('lottie-bg'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        // Abstract wave shapes
+        path: 'https://lottie.host/4b5b7c7e-8c6e-4f0e-9b9a-1c8e8c8e8c8e/1234567890.json' // Placeholder replaced below
+    });
+    document.getElementById('lottie-bg').innerHTML = '';
+    lottie.loadAnimation({
+        container: document.getElementById('lottie-bg'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://assets2.lottiefiles.com/packages/lf20_w51pcehl.json' 
+    });
+
+    // --- Original Logic ---
     const API_URL = window.location.origin;
-    fetch('/auth/verify', { method: 'POST' }).then(() => {
-        refreshData();
-    }).catch(e => console.log("Auth failed", e));
+    fetch('/auth/verify', { method: 'POST' }).then(() => refreshData()).catch(console.error);
+    
     function showToast(msg, type = "success") {
         const t = document.getElementById('toast');
         t.innerText = msg;
         t.className = type === "error" ? "show error" : "show";
         setTimeout(() => t.className = '', 2000);
     }
+    
     function showQr(url) {
-        const modal = document.getElementById('qrModal');
-        const container = document.getElementById('qrcode');
-        container.innerHTML = ''; 
-        new QRCode(container, { text: url, width: 200, height: 200 });
-        modal.classList.add('show');
+        const c = document.getElementById('qrcode'); c.innerHTML = '';
+        new QRCode(c, { text: url, width: 180, height: 180 });
+        document.getElementById('qrModal').classList.add('show');
     }
-    function closeQr() { document.getElementById('qrModal').classList.remove('show'); }
+
     async function refreshData() {
         try {
             const res = await fetch(API_URL + '/info');
             const json = await res.json();
             const el = document.getElementById('totalLinks');
-            if(el) el.innerText = json.total_links || 0;
+            if(el) {
+                const start = parseInt(el.innerText) || 0;
+                const end = json.total_links || 0;
+                animateValue(el, start, end, 1000);
+            }
         } catch (e) { console.log(e); }
     }
+
+    function animateValue(obj, start, end, duration) {
+        if (start === end) return;
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start);
+            if (progress < 1) window.requestAnimationFrame(step);
+            else obj.innerHTML = end;
+        };
+        window.requestAnimationFrame(step);
+    }
+
     async function createLink() {
-        const urlInput = document.getElementById('urlInput');
-        const aliasInput = document.getElementById('aliasInput');
-        let url = urlInput.value.trim();
-        const alias = aliasInput.value.trim();
+        const urlIn = document.getElementById('urlInput');
+        const aliasIn = document.getElementById('aliasInput');
+        let url = urlIn.value.trim();
+        const alias = aliasIn.value.trim();
+
         if(!url) return showToast("URL is required!", "error");
         if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
         try {
             const check = new URL(url);
-            if(check.hostname === window.location.hostname) return showToast("Cannot shorten internal links!", "error");
-        } catch(e) { return showToast("Invalid URL format!", "error"); }
+            if(check.hostname === window.location.hostname) return showToast("Infinite loop detected!", "error");
+        } catch(e) { return showToast("Invalid URL!", "error"); }
+
         const btn = document.getElementById('btnCreate');
-        btn.disabled = true; btn.innerHTML = '<i class="ph ph-spinner-gap" style="animation:spin 1s linear infinite"></i>';
+        const originalText = btn.innerHTML;
+        btn.disabled = true; btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i>';
+        lucide.createIcons();
+
         try {
             const res = await fetch(API_URL + '/api/shorten', {
-                method: 'POST',
-                body: JSON.stringify({ url, alias })
+                method: 'POST', body: JSON.stringify({ url, alias })
             });
             const d = await res.json();
+            
             if(res.ok) {
                 const fullUrl = `${API_URL}/${d.short_code}`;
-                document.getElementById('resultLink').href = fullUrl;
-                document.getElementById('resultLink').innerText = window.location.host + "/" + d.short_code;
-                document.getElementById('btnResCopy').onclick = () => copyText(fullUrl, document.getElementById('btnResCopy'));
-                document.getElementById('btnResQr').onclick = () => showQr(fullUrl);
+                const resLink = document.getElementById('resultLink');
+                resLink.href = fullUrl;
+                resLink.innerText = window.location.host + "/" + d.short_code;
+                
+                document.getElementById('btnResCopy').onclick = () => {
+                    navigator.clipboard.writeText(fullUrl);
+                    showToast("Copied to clipboard!");
+                };
+                
                 document.getElementById('resultContainer').style.display = 'block';
-                urlInput.value = ''; aliasInput.value = '';
+                urlIn.value = ''; aliasIn.value = '';
                 showToast("Shortlink created!");
                 refreshData();
-            } else showToast(d.error || "Failed", "error");
-        } catch (e) { showToast("Connection error", "error"); }
-        btn.disabled = false; btn.innerHTML = '<i class="ph-bold ph-magic-wand"></i> Shorten';
+            } else {
+                showToast(d.error || "Error", "error");
+            }
+        } catch (e) { showToast("Connection failed", "error"); }
+        
+        btn.disabled = false; btn.innerHTML = originalText;
+        lucide.createIcons();
     }
-    function copyText(text, btn) {
-        const icon = btn.querySelector('i');
-        const doCopy = () => {
-            showToast("Copied!");
-            icon.className = 'ph-bold ph-check';
-            setTimeout(() => icon.className = 'ph-bold ph-copy', 1500);
-        };
-        if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(text).then(doCopy).catch(() => fallbackCopy(text, doCopy));
-        } else fallbackCopy(text, doCopy);
-    }
-    function fallbackCopy(text, cb) {
-        const t = document.createElement("textarea"); t.value = text;
-        t.style.position="fixed"; t.style.left="-9999px"; document.body.appendChild(t);
-        t.focus(); t.select();
-        try { document.execCommand('copy'); cb(); } catch(e) {}
-        document.body.removeChild(t);
-    }
+
     document.getElementById('currentYear').innerText = new Date().getFullYear();
     setInterval(refreshData, 10000);
 </script>
+
 </body>
 </html>
