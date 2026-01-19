@@ -69,10 +69,10 @@ pub fn main() !void {
             try serveFile(connection.stream, "src/index.html");
         }
         else if (std.mem.eql(u8, path, "/og-image.png")) {
-            try serveImage(connection.stream, "src/og-image.png");
+            try serveImage(connection.stream, "src/og-image.png", "image/png");
         }
-        else if (std.mem.eql(u8, path, "/favicon.png")) {
-            try serveImage(connection.stream, "src/favicon.png");
+        else if (std.mem.eql(u8, path, "/favicon.svg")) {
+            try serveImage(connection.stream, "src/favicon.svg", "image/svg+xml");
         }
         else if (std.mem.eql(u8, path, "/info")) {
             try serveJsonStats(connection.stream);
@@ -163,7 +163,7 @@ fn serveFile(stream: net.Stream, path: []const u8) !void {
     try stream.writeAll(content);
 }
 
-fn serveImage(stream: net.Stream, path: []const u8) !void {
+fn serveImage(stream: net.Stream, path: []const u8, mime_type: []const u8) !void {
     const file = std.fs.cwd().openFile(path, .{}) catch {
         try serve404(stream);
         return;
@@ -171,7 +171,8 @@ fn serveImage(stream: net.Stream, path: []const u8) !void {
     defer file.close();
     const content = try file.readToEndAlloc(allocator, 5 * 1024 * 1024);
     defer allocator.free(content);
-    const header = "HTTP/1.1 200 OK\r\nContent-Type: image/png\r\nConnection: close\r\n\r\n";
+    const header = try std.fmt.allocPrint(allocator, "HTTP/1.1 200 OK\r\nContent-Type: {s}\r\nConnection: close\r\n\r\n", .{mime_type});
+    defer allocator.free(header);
     try stream.writeAll(header);
     try stream.writeAll(content);
 }
